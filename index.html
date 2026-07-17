@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlowOne — Solo Product Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0F3460;
+    --navy-deep:#0A2443;
+    --gray:#F5F7FA;
+    --blue:#2979FF;
+    --white:#FFFFFF;
+    --line-on-navy: rgba(245,247,250,0.16);
+    --line-on-gray: rgba(15,52,96,0.14);
+    --text-on-navy: rgba(245,247,250,0.82);
+    --text-on-navy-dim: rgba(245,247,250,0.62);
+    --text-on-gray: rgba(15,52,96,0.72);
+    --font-display:'Bricolage Grotesque', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+    --font-ar:'Cairo', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ background:var(--navy); color:var(--text-on-navy); font-family:var(--font-body); line-height:1.55; overflow-x:hidden; }
+  html[lang="ar"] body{ font-family:var(--font-ar); }
+  html[lang="ar"] .mono{ direction:ltr; unicode-bidi:embed; display:inline-block; }
+  a{ color:inherit; }
+  .mono{ font-family:var(--font-mono); letter-spacing:0.02em; }
+  ::selection{ background:var(--blue); color:var(--white); }
+  :focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
+  svg.icon{ width:22px; height:22px; stroke:var(--navy); fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* ---------- NAV ---------- */
+  header{ position:sticky; top:0; z-index:50; background:rgba(15,52,96,0.82); backdrop-filter:blur(12px); border-bottom:1px solid var(--line-on-navy); }
+  nav{ display:flex; align-items:center; justify-content:space-between; padding:18px 0; }
+  .logo{ font-family:var(--font-display); font-size:1.2rem; display:flex; align-items:center; gap:10px; color:var(--white); }
+  .logo-icon{ width:30px; height:30px; flex-shrink:0; }
+  .logo .glow{ font-weight:500; }
+  .logo .one{ font-weight:800; color:var(--blue); }
+  .nav-links{ display:flex; align-items:center; gap:30px; font-size:0.93rem; font-weight:500; }
+  .nav-links a{ opacity:0.75; text-decoration:none; transition:opacity .2s; color:var(--text-on-navy); }
+  .nav-links a:hover{ opacity:1; }
+  .promo-badge{ font-family:var(--font-mono); font-size:0.76rem; font-weight:600; color:var(--white); background:var(--blue); padding:7px 16px; border-radius:999px; letter-spacing:0.03em; white-space:nowrap; }
+  .nav-actions{ display:flex; align-items:center; gap:12px; }
+  .lang-toggle{ font-family:var(--font-mono); font-size:0.75rem; letter-spacing:0.03em; background:transparent; border:1.5px solid var(--line-on-navy); color:var(--text-on-navy); padding:8px 14px; border-radius:999px; cursor:pointer; transition:.2s; }
+  .lang-toggle:hover{ background:var(--blue); border-color:var(--blue); color:var(--white); }
+
+  .btn{ font-family:var(--font-body); font-size:0.92rem; font-weight:600; padding:13px 24px; border-radius:999px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border:2px solid transparent; transition:transform .15s ease, background .2s ease, color .2s ease; }
+  .btn-primary{ background:var(--blue); color:var(--white); border-color:var(--blue); }
+  .btn-primary:hover{ transform:translateY(-2px); background:#1a63e0; }
+  .btn-whatsapp-icon{ width:48px; height:48px; padding:0; border-radius:50%; border:2px solid var(--line-on-navy); background:transparent; justify-content:center; }
+  .btn-whatsapp-icon:hover{ background:rgba(245,247,250,0.08); border-color:var(--white); transform:translateY(-2px); }
+  .btn-whatsapp-icon svg{ width:22px; height:22px; fill:var(--text-on-navy); transition:fill .2s ease; }
+  .btn-whatsapp-icon:hover svg{ fill:var(--white); }
+
+  @media (max-width:760px){ .nav-links{ display:none; } .promo-badge{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  .hero{ position:relative; padding:88px 0 60px; overflow:hidden; }
+  .blob{ position:absolute; border-radius:50%; filter:blur(70px); opacity:0.35; z-index:0; }
+  .blob-1{ width:420px; height:420px; background:var(--blue); top:-160px; left:-120px; }
+  .blob-2{ width:380px; height:380px; background:var(--gray); top:60px; right:-160px; opacity:0.14; }
+  .blob-3{ width:300px; height:300px; background:var(--blue); bottom:-140px; left:38%; opacity:0.22; }
+  @media (prefers-reduced-motion:no-preference){
+    .blob-1{ animation:drift1 16s ease-in-out infinite; }
+    .blob-2{ animation:drift2 20s ease-in-out infinite; }
+    .blob-3{ animation:drift1 24s ease-in-out infinite reverse; }
+  }
+  @keyframes drift1{ 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(30px,20px); } }
+  @keyframes drift2{ 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(-25px,25px); } }
+
+  .coord-stamp{ position:absolute; top:20px; right:28px; z-index:3; font-family:var(--font-mono); font-size:0.68rem; color:var(--text-on-navy-dim); text-align:right; line-height:1.5; }
+  html[dir="rtl"] .coord-stamp{ right:auto; left:28px; text-align:left; }
+
+  .hero-inner{ position:relative; z-index:3; text-align:center; }
+  .audience-row{ display:inline-flex; align-items:flex-start; gap:0; margin-bottom:34px; }
+  .audience-node{ display:flex; flex-direction:column; align-items:center; gap:9px; width:92px; }
+  .audience-icon{ width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 35% 30%, rgba(143,193,255,0.35), rgba(41,121,255,0.1) 65%, transparent 100%); border:1.5px solid rgba(143,193,255,0.5); }
+  .audience-icon svg{ width:22px; height:22px; stroke:#8FC1FF; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+  .audience-label{ font-family:var(--font-mono); font-size:0.7rem; color:var(--text-on-navy-dim); letter-spacing:0.02em; white-space:nowrap; }
+  .audience-connector{ width:40px; height:2px; margin-top:26px; position:relative; background:linear-gradient(90deg, rgba(143,193,255,0.55), rgba(143,193,255,0.15)); flex-shrink:0; }
+  .audience-connector .pulse{ position:absolute; top:50%; width:5px; height:5px; margin-top:-2.5px; border-radius:50%; background:#8FC1FF; box-shadow:0 0 8px 2px rgba(143,193,255,0.6); animation:audienceTravel 2.8s ease-in-out infinite; }
+  @keyframes audienceTravel{ 0%{ left:0%; } 50%{ left:calc(100% - 5px); } 100%{ left:0%; } }
+  @media (prefers-reduced-motion:reduce){ .audience-connector .pulse{ animation:none; left:50%; } }
+  @media (max-width:560px){ .audience-connector{ width:20px; } .audience-node{ width:74px; } .audience-icon{ width:44px; height:44px; } .audience-label{ font-size:0.62rem; } }
+
+  h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(2.3rem, 5.4vw, 4rem); line-height:1.12; letter-spacing:-0.015em; max-width:860px; margin:0 auto 24px; color:var(--white); }
+  html[lang="ar"] h1{ font-family:var(--font-ar); font-weight:700; }
+  h1 .accent{ background:var(--blue); color:var(--white); padding:2px 12px; border-radius:8px; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+  .hero-sub{ font-size:1.12rem; color:var(--text-on-navy-dim); max-width:560px; margin:0 auto 36px; }
+  .hero-ctas{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:60px; }
+
+  /* ---------- DEMO PANEL ---------- */
+  .demo-panel{ max-width:640px; margin:0 auto; background:var(--gray); border:2px solid var(--navy-deep); border-radius:20px; padding:30px; text-align:left; box-shadow:8px 8px 0 var(--blue); }
+  html[dir="rtl"] .demo-panel{ text-align:right; box-shadow:-8px 8px 0 var(--blue); }
+  .demo-label{ font-family:var(--font-mono); font-size:0.75rem; color:var(--text-on-gray); margin-bottom:14px; }
+  .demo-input-row{ display:flex; gap:10px; margin-bottom:20px; }
+  .demo-input{ flex:1; background:var(--white); border:1.5px solid var(--line-on-gray); color:var(--navy); font-family:var(--font-body); font-size:0.95rem; padding:13px 16px; border-radius:12px; }
+  .demo-input:focus{ border-color:var(--blue); outline:none; }
+  html[lang="ar"] .demo-input{ font-family:var(--font-ar); }
+  .demo-btn{ font-family:var(--font-body); font-size:0.88rem; font-weight:700; background:var(--navy); color:var(--white); border:none; padding:0 22px; border-radius:12px; cursor:pointer; white-space:nowrap; }
+  .demo-btn:hover{ background:var(--navy-deep); }
+  .demo-output{ border-top:1.5px dashed var(--line-on-gray); padding-top:18px; min-height:120px; }
+  .plan-line{ display:flex; gap:12px; align-items:center; margin-bottom:11px; opacity:0; transform:translateY(6px); animation:reveal .5s ease forwards; }
+  @media (prefers-reduced-motion:reduce){ .plan-line{ animation:none; opacity:1; transform:none; } }
+  @keyframes reveal{ to{ opacity:1; transform:translateY(0); } }
+  .plan-tag{ font-family:var(--font-mono); font-size:0.68rem; font-weight:600; padding:4px 10px; border-radius:999px; white-space:nowrap; }
+  .plan-tag.core{ background:rgba(41,121,255,0.14); color:var(--navy); }
+  .plan-tag.ai{ background:var(--navy); color:var(--white); }
+  .plan-tag.pace{ background:var(--white); color:var(--navy); border:1.5px solid var(--line-on-gray); }
+  .plan-text{ font-size:0.93rem; color:var(--navy); }
+  .demo-placeholder{ color:var(--text-on-gray); font-size:0.88rem; font-style:italic; }
+
+  /* ---------- SECTIONS ---------- */
+  section{ padding:88px 0; position:relative; }
+  .section-head{ max-width:640px; margin-bottom:48px; }
+  .section-head.centered{ max-width:640px; margin:0 auto 44px; text-align:center; }
+  .section-eyebrow{ font-family:var(--font-mono); font-size:0.74rem; color:var(--blue); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:12px; display:block; font-weight:600; }
+  h2{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.7rem, 3.2vw, 2.4rem); letter-spacing:-0.015em; color:var(--white); }
+  html[lang="ar"] h2{ font-family:var(--font-ar); font-weight:700; }
+  .section-body{ color:var(--text-on-navy-dim); margin-top:14px; font-size:1.02rem; max-width:560px; }
+  .section-body.centered{ margin-left:auto; margin-right:auto; }
+
+  /* ---------- CAPABILITIES ---------- */
+  .capabilities{ position:relative; overflow:hidden; border-radius:32px; background:var(--navy); padding:100px 0; }
+  .capabilities-media{ position:absolute; inset:0; z-index:0; }
+  .capabilities-video{ width:100%; height:100%; object-fit:cover; display:block; }
+  .capabilities-overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(15,52,96,0.68), rgba(15,52,96,0.9)); }
+  .capabilities .blob{ z-index:1; }
+  .capabilities-content{ position:relative; z-index:2; }
+  .capability-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:44px; }
+  @media (max-width:860px){ .capability-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .capability-grid{ grid-template-columns:1fr; } }
+  .capability-card{ background:rgba(245,247,250,0.08); backdrop-filter:blur(14px); border:1.5px solid rgba(245,247,250,0.18); border-radius:18px; padding:26px 22px; transition:transform .25s ease, background .25s ease; }
+  .capability-card:hover{ transform:translateY(-4px); background:rgba(245,247,250,0.14); }
+  .capability-icon{ width:42px; height:42px; border-radius:12px; background:rgba(143,193,255,0.18); display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+  .capability-icon svg{ width:22px; height:22px; stroke:#8FC1FF; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+  .capability-title{ font-family:var(--font-display); font-weight:700; font-size:1.02rem; margin-bottom:6px; color:var(--white); }
+  html[lang="ar"] .capability-title{ font-family:var(--font-ar); font-weight:700; }
+  .capability-desc{ font-size:0.85rem; color:rgba(245,247,250,0.72); line-height:1.5; }
+
+  /* ---------- PILLARS ---------- */
+  .pillars-layout{ display:grid; grid-template-columns:1.05fr 1fr; gap:16px; }
+  @media (max-width:860px){ .pillars-layout{ grid-template-columns:1fr; } }
+
+  .pillar-feature{ background:var(--blue); color:var(--white); border-radius:24px; padding:36px; display:flex; flex-direction:column; justify-content:space-between; }
+  .pillar-feature-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; }
+  .pillar-feature .icon-badge{ background:var(--white); border-radius:12px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; }
+  .pillar-feature .icon-badge svg{ stroke:var(--blue); }
+  .pillar-feature .pillar-code{ font-family:var(--font-mono); font-size:0.75rem; color:rgba(255,255,255,0.65); }
+  .direct-line{ position:relative; height:2px; background:rgba(255,255,255,0.25); margin:28px 4px 32px; border-radius:2px; }
+  .direct-line .node{ position:absolute; top:50%; width:10px; height:10px; border-radius:50%; background:var(--blue); border:2px solid var(--white); transform:translateY(-50%); }
+  .direct-line .node.a{ left:-2px; } .direct-line .node.b{ right:-2px; }
+  .direct-line .pulse{ position:absolute; top:50%; width:7px; height:7px; margin-top:-3.5px; border-radius:50%; background:var(--white); box-shadow:0 0 14px 3px rgba(255,255,255,0.65); animation:travel 3s ease-in-out infinite; }
+  @media (prefers-reduced-motion:reduce){ .direct-line .pulse{ animation:none; left:50%; } }
+  @keyframes travel{ 0%{ left:0%; } 50%{ left:calc(100% - 7px); } 100%{ left:0%; } }
+  .pillar-feature-title{ font-family:var(--font-display); font-weight:700; font-size:1.45rem; margin-bottom:10px; }
+  html[lang="ar"] .pillar-feature-title{ font-family:var(--font-ar); }
+  .pillar-feature-desc{ font-size:0.98rem; color:rgba(255,255,255,0.82); max-width:380px; }
+
+  .pillar-mini-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:520px){ .pillar-mini-grid{ grid-template-columns:1fr; } }
+  .pillar{ border-radius:20px; padding:24px 22px; transition:transform .2s ease; background:var(--gray); border:2px solid transparent; }
+  .pillar:hover{ transform:translateY(-3px); }
+  .pillar-icon-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .icon-badge-sm{ background:var(--white); border:2px solid var(--line-on-gray); border-radius:10px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; }
+  .pillar-code{ font-family:var(--font-mono); font-size:0.7rem; font-weight:600; color:var(--blue); }
+  .pillar-title{ font-family:var(--font-display); font-weight:700; font-size:1rem; margin-bottom:7px; color:var(--navy); }
+  html[lang="ar"] .pillar-title{ font-family:var(--font-ar); font-weight:700; }
+  .pillar-desc{ font-size:0.85rem; color:var(--text-on-gray); line-height:1.5; }
+
+  /* ---------- STORIES ---------- */
+  .stories{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:900px){ .stories{ grid-template-columns:1fr; } }
+  .story-card{ border-radius:20px; padding:30px 28px 28px; background:var(--gray); position:relative; overflow:hidden; border:2px solid transparent; transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .story-card::before{ content:""; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--blue), #8FC1FF); }
+  .story-card::after{ content:""; position:absolute; top:-46px; right:-46px; width:150px; height:150px; border-radius:50%; background:radial-gradient(circle, rgba(41,121,255,0.16), transparent 70%); pointer-events:none; }
+  .story-card:hover{ transform:translateY(-6px); box-shadow:0 22px 42px -14px rgba(15,52,96,0.28), 0 0 0 1px rgba(41,121,255,0.12); border-color:rgba(41,121,255,0.35); }
+  .story-card.flagship{ background:var(--blue); color:var(--white); }
+  .story-card.flagship::before{ background:linear-gradient(90deg, #FFFFFF, #8FC1FF); }
+  .story-card.flagship::after{ background:radial-gradient(circle, rgba(255,255,255,0.28), transparent 70%); }
+  .story-vp{ font-family:var(--font-mono); font-size:0.72rem; font-weight:600; margin-bottom:16px; display:flex; justify-content:flex-end; align-items:center; color:var(--navy); position:relative; z-index:1; }
+  .story-card.flagship .story-vp{ color:var(--white); }
+  .story-vp.has-label{ justify-content:space-between; }
+  .story-tag{ background:var(--navy); color:var(--white); padding:3px 10px; border-radius:999px; font-size:0.68rem; }
+  .story-card.flagship .story-tag{ background:var(--white); color:var(--blue); }
+  .story-title{ font-family:var(--font-display); font-weight:700; font-size:1.16rem; margin-bottom:12px; color:var(--navy); position:relative; z-index:1; }
+  .story-card.flagship .story-title{ color:var(--white); }
+  html[lang="ar"] .story-title{ font-family:var(--font-ar); font-weight:700; }
+  .story-arc{ font-size:0.92rem; color:var(--text-on-gray); margin-bottom:16px; position:relative; z-index:1; }
+  .story-card.flagship .story-arc{ color:rgba(255,255,255,0.82); }
+  .story-from-to{ font-family:var(--font-mono); font-size:0.76rem; font-weight:600; border-top:1.5px dashed var(--line-on-gray); padding-top:14px; color:var(--navy); position:relative; z-index:1; }
+  .story-card.flagship .story-from-to{ color:var(--white); border-top-color:rgba(255,255,255,0.3); }
+
+  /* ---------- PROCESS ---------- */
+  .process{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; position:relative; }
+  .process::before{ content:""; position:absolute; top:41px; left:6%; right:6%; height:2px; background:repeating-linear-gradient(90deg, rgba(41,121,255,0.4) 0 6px, transparent 6px 12px); z-index:0; }
+  @media (max-width:760px){ .process{ grid-template-columns:1fr 1fr; } .process::before{ display:none; } }
+  .step{ background:var(--gray); border-radius:18px; padding:24px 20px; position:relative; z-index:1; overflow:hidden; border:2px solid transparent; transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .step::after{ content:""; position:absolute; top:-36px; right:-36px; width:110px; height:110px; border-radius:50%; background:radial-gradient(circle, rgba(41,121,255,0.12), transparent 70%); pointer-events:none; }
+  .step:hover{ transform:translateY(-5px); box-shadow:0 18px 34px -12px rgba(15,52,96,0.24), 0 0 0 1px rgba(41,121,255,0.15); border-color:rgba(41,121,255,0.3); }
+  .step-num{ font-family:var(--font-mono); background:radial-gradient(circle at 35% 30%, #BFE0FF, var(--blue) 55%, #0A2443 100%); color:var(--white); display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; font-size:0.85rem; margin-bottom:14px; font-weight:700; box-shadow:0 0 0 4px rgba(41,121,255,0.14), 0 4px 10px -2px rgba(41,121,255,0.45); position:relative; z-index:2; }
+  .step-title{ font-family:var(--font-display); font-weight:700; font-size:1rem; margin-bottom:6px; color:var(--navy); position:relative; z-index:1; }
+  html[lang="ar"] .step-title{ font-family:var(--font-ar); font-weight:700; }
+  .step-desc{ font-size:0.85rem; color:var(--text-on-gray); position:relative; z-index:1; }
+
+  /* ---------- CLOSE ---------- */
+  .close{ text-align:center; padding:100px 0 110px; position:relative; overflow:hidden; background:var(--blue); color:var(--white); border-radius:32px 32px 0 0; margin-top:20px; }
+  .close .blob{ opacity:0.15; background:var(--white); }
+  .close-content{ position:relative; z-index:2; }
+  .close h2{ max-width:640px; margin:0 auto 18px; color:var(--white); }
+  .close-sub{ color:rgba(255,255,255,0.78); max-width:480px; margin:0 auto 36px; }
+  .close-ctas{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  .close .btn-primary{ background:var(--white); color:var(--blue); border-color:var(--white); }
+  .close .btn-primary:hover{ background:var(--gray); }
+  .close .btn-whatsapp-icon{ border-color:rgba(255,255,255,0.5); }
+  .close .btn-whatsapp-icon:hover{ background:rgba(255,255,255,0.14); border-color:var(--white); }
+  .close .btn-whatsapp-icon svg{ fill:var(--white); }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="logo">
+      <svg class="logo-icon" viewBox="0 0 200 200">
+        <defs>
+          <radialGradient id="navHalo" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#2979FF" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#2979FF" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="navCore" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#FFFFFF"/>
+            <stop offset="35%" stop-color="#8FC1FF"/>
+            <stop offset="100%" stop-color="#2979FF" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="navRing" x1="20%" y1="10%" x2="80%" y2="90%">
+            <stop offset="0%" stop-color="#8FC1FF"/>
+            <stop offset="55%" stop-color="#2979FF"/>
+            <stop offset="100%" stop-color="#0A2443"/>
+          </linearGradient>
+          <filter id="navBlur"><feGaussianBlur stdDeviation="10"/></filter>
+        </defs>
+        <circle cx="100" cy="100" r="95" fill="url(#navHalo)" filter="url(#navBlur)"/>
+        <circle cx="100" cy="100" r="62" fill="none" stroke="url(#navRing)" stroke-width="4"/>
+        <circle cx="100" cy="100" r="30" fill="url(#navCore)"/>
+        <circle cx="100" cy="100" r="8" fill="#FFFFFF"/>
+      </svg>
+      <span><span class="glow" data-i18n="nav.logoGlow">Glow</span><span class="one" data-i18n="nav.logoOne">One</span></span>
+    </div>
+    <div class="promo-badge" data-i18n="nav.promo">Special Offer — 50% Off</div>
+    <div class="nav-actions">
+      <button class="lang-toggle" id="langToggle">العربية</button>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="wrap hero-inner">
+    <div class="audience-row">
+      <div class="audience-node">
+        <div class="audience-icon"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3 11.2c.6.4 1 1.1 1 1.8h4c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z"/></svg></div>
+        <span class="audience-label" data-i18n="hero.audience.founders">Founders</span>
+      </div>
+      <div class="audience-connector"><div class="pulse"></div></div>
+      <div class="audience-node">
+        <div class="audience-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="21"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/><line x1="6" y1="6" x2="9.5" y2="9.5"/><line x1="14.5" y1="14.5" x2="18" y2="18"/></svg></div>
+        <span class="audience-label" data-i18n="hero.audience.creatives">Creatives</span>
+      </div>
+      <div class="audience-connector"><div class="pulse"></div></div>
+      <div class="audience-node">
+        <div class="audience-icon"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><polyline points="15,6 21,6 21,12"/></svg></div>
+        <span class="audience-label" data-i18n="hero.audience.entrepreneurs">Entrepreneurs</span>
+      </div>
+    </div>
+    <h1><span data-i18n="hero.h1a">Idea to real product.</span><br><span class="accent" data-i18n="hero.h1b">Built with speed and focus.</span></h1>
+    <p class="hero-sub" data-i18n="hero.sub">Egypt's first solo product studio. No account managers, no handoffs — a direct line to the person actually building it.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn btn-primary" data-i18n="hero.cta1">Get a Demo</a>
+      <a href="#contact" class="btn btn-whatsapp-icon" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.85.5 3.58 1.35 5.07L2 22l5.25-1.38c1.43.78 3.06 1.22 4.79 1.22 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.9 14.02c-.25.7-1.45 1.35-2 1.44-.5.08-1.15.11-1.86-.12-.43-.14-.98-.32-1.68-.63-2.96-1.28-4.89-4.26-5.04-4.46-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37h.57c.18 0 .43-.07.67.51.25.6.85 2.07.92 2.22.07.15.12.33.02.53-.1.2-.15.32-.3.5-.15.18-.31.4-.44.54-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.36 1.46.3.15.48.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.08.13.08.75-.17 1.45z"/></svg>
+      </a>
+    </div>
+
+    <div class="demo-panel">
+      <div class="demo-label" data-i18n="demo.label">Type your idea. Watch it become a plan.</div>
+      <div class="demo-input-row">
+        <input class="demo-input" id="ideaInput" data-i18n-placeholder="demo.placeholder" placeholder="A booking app for my detailing shop...">
+        <button class="demo-btn" id="demoBtn" data-i18n="demo.button">Scope it</button>
+      </div>
+      <div class="demo-output" id="demoOutput">
+        <div class="demo-placeholder" data-i18n="demo.placeholder2">Your scope will appear here — instantly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="capabilities" class="capabilities">
+  <div class="capabilities-media">
+    <video class="capabilities-video" autoplay muted loop playsinline></video>
+    <div class="capabilities-overlay"></div>
+  </div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="wrap capabilities-content">
+    <div class="section-head centered">
+      <span class="section-eyebrow" data-i18n="capabilities.eyebrow">What's Inside</span>
+      <h2 data-i18n="capabilities.h2">The Full Loop</h2>
+      <p class="section-body centered" data-i18n="capabilities.body">From validating the idea, to building it, filming it, and growing it — one studio, every layer.</p>
+    </div>
+    <div class="capability-grid">
+      <div class="capability-card">
+        <div class="capability-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="8,12 11,15 16,9"/></svg></div>
+        <div class="capability-title" data-i18n="capabilities.c1.title">Market Validation</div>
+        <div class="capability-desc" data-i18n="capabilities.c1.desc">We test demand before you spend a dollar building.</div>
+      </div>
+      <div class="capability-card">
+        <div class="capability-icon"><svg viewBox="0 0 24 24"><polyline points="8,6 3,12 8,18"/><polyline points="16,6 21,12 16,18"/></svg></div>
+        <div class="capability-title" data-i18n="capabilities.c2.title">AI Software &amp; MVPs</div>
+        <div class="capability-desc" data-i18n="capabilities.c2.desc">Working products, not slide decks — shipped fast.</div>
+      </div>
+      <div class="capability-card">
+        <div class="capability-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><polygon points="10,9 10,15 15,12"/></svg></div>
+        <div class="capability-title" data-i18n="capabilities.c3.title">AI Video &amp; Creative</div>
+        <div class="capability-desc" data-i18n="capabilities.c3.desc">Reels and content that sell the product, not just show it.</div>
+      </div>
+      <div class="capability-card">
+        <div class="capability-icon"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,7"/><polyline points="15,7 21,7 21,13"/></svg></div>
+        <div class="capability-title" data-i18n="capabilities.c4.title">Growth Marketing</div>
+        <div class="capability-desc" data-i18n="capabilities.c4.desc">The channels that get your first real users, not vanity metrics.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pillars">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-eyebrow" data-i18n="pillars.eyebrow">Why GlowOne</span>
+    </div>
+    <div class="pillars-layout">
+      <div class="pillar-feature">
+        <div>
+          <div class="pillar-feature-top">
+            <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.4"/><circle cx="19" cy="12" r="2.4"/><line x1="7.4" y1="12" x2="16.6" y2="12"/></svg></div>
+          </div>
+          <div class="pillar-feature-title" data-i18n="pillars.p5.title">Direct line to the builder</div>
+          <div class="pillar-feature-desc" data-i18n="pillars.p5.desc">No account managers. No tickets. Just you, and the person building it.</div>
+        </div>
+        <div class="direct-line">
+          <div class="node a"></div>
+          <div class="pulse"></div>
+          <div class="node b"></div>
+        </div>
+      </div>
+      <div class="pillar-mini-grid">
+        <div class="pillar">
+          <div class="pillar-icon-row"><div class="icon-badge-sm"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/></svg></div></div>
+          <div class="pillar-title" data-i18n="pillars.p1.title">One operator</div>
+          <div class="pillar-desc" data-i18n="pillars.p1.desc">Not a freelancer. Not an agency. Full-stack, product-minded, single point of ownership.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon-row"><div class="icon-badge-sm"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><line x1="12" y1="2.5" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="21.5" y2="12"/></svg></div></div>
+          <div class="pillar-title" data-i18n="pillars.p2.title">Focus &amp; speed</div>
+          <div class="pillar-desc" data-i18n="pillars.p2.desc">Fixed price. No bloated discovery phases. No scope creep.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon-row"><div class="icon-badge-sm"><svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="21"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/></svg></div></div>
+          <div class="pillar-title" data-i18n="pillars.p3.title">AI-native creative</div>
+          <div class="pillar-desc" data-i18n="pillars.p3.desc">The product, and the content that sells it — from one source.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon-row"><div class="icon-badge-sm"><svg class="icon" viewBox="0 0 24 24"><path d="M3 17 Q9 9, 15 12 T21 6"/><polyline points="16.5,5 21,6 20,10.5"/></svg></div></div>
+          <div class="pillar-title" data-i18n="pillars.p4.title">Idea to real product</div>
+          <div class="pillar-desc" data-i18n="pillars.p4.desc">The whole journey — not just the development work.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-eyebrow" data-i18n="stories.eyebrow">Proof, not promises</span>
+      <h2 data-i18n="stories.h2">Three points already surveyed</h2>
+      <p class="section-body" data-i18n="stories.body">Real builds, mapped to real problems.</p>
+    </div>
+    <div class="stories">
+      <div class="story-card">
+        <div class="story-vp"><span class="story-tag" data-i18n="stories.s1.tag">Education</span></div>
+        <div class="story-title" data-i18n="stories.s1.title">Tutor Platform</div>
+        <div class="story-arc" data-i18n="stories.s1.arc">An English tutor managed everything through Instagram DMs — no way to show her value beyond word of mouth. A branded platform now carries her teaching story, results, and booking in one place.</div>
+        <div class="story-from-to" data-i18n="stories.s1.fromto">FROM scattered DMs → TO a branded platform</div>
+      </div>
+      <div class="story-card">
+        <div class="story-vp"><span class="story-tag" data-i18n="stories.s2.tag">Fitness</span></div>
+        <div class="story-title" data-i18n="stories.s2.title">Trainer App</div>
+        <div class="story-arc" data-i18n="stories.s2.arc">A personal trainer tracked every client's workouts from memory — no room to grow past a handful of people. An app now assigns routines and tracks progress on its own.</div>
+        <div class="story-from-to" data-i18n="stories.s2.fromto">FROM spreadsheets → TO a system that runs itself</div>
+      </div>
+      <div class="story-card flagship">
+        <div class="story-vp has-label"><span data-i18n="stories.flagship">Flagship</span><span class="story-tag" data-i18n="stories.s3.tag">Personal AI</span></div>
+        <div class="story-title" data-i18n="stories.s3.title">Life OS</div>
+        <div class="story-arc" data-i18n="stories.s3.arc">A system for anyone drowning in tasks and routines. An AI-powered tracker that manages your day and quietly surfaces what matters next.</div>
+        <div class="story-from-to" data-i18n="stories.s3.fromto">FROM mental overload → TO a system that thinks ahead</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-eyebrow" data-i18n="process.eyebrow">How it works</span>
+      <h2 data-i18n="process.h2">Four steps. One person, start to finish.</h2>
+    </div>
+    <div class="process">
+      <div class="step"><div class="step-num mono">01</div><div class="step-title" data-i18n="process.st1.title">Demo call</div><div class="step-desc" data-i18n="process.st1.desc">You explain the problem. No forms, no briefs.</div></div>
+      <div class="step"><div class="step-num mono">02</div><div class="step-title" data-i18n="process.st2.title">Scope locked</div><div class="step-desc" data-i18n="process.st2.desc">Fixed price, fixed deliverable, in writing.</div></div>
+      <div class="step"><div class="step-num mono">03</div><div class="step-title" data-i18n="process.st3.title">Build</div><div class="step-desc" data-i18n="process.st3.desc">You get progress updates, not silence.</div></div>
+      <div class="step"><div class="step-num mono">04</div><div class="step-title" data-i18n="process.st4.title">Launch &amp; handover</div><div class="step-desc" data-i18n="process.st4.desc">You own everything. No lock-in.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="close" id="contact">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="wrap close-content">
+    <h2 data-i18n="close.h2">Ready to see your idea scoped?</h2>
+    <p class="close-sub" data-i18n="close.sub">One conversation. No account manager in sight.</p>
+    <div class="close-ctas">
+      <a href="#" class="btn btn-primary" data-i18n="close.cta1">Get a Demo</a>
+      <a href="#" class="btn btn-whatsapp-icon" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.85.5 3.58 1.35 5.07L2 22l5.25-1.38c1.43.78 3.06 1.22 4.79 1.22 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm5.9 14.02c-.25.7-1.45 1.35-2 1.44-.5.08-1.15.11-1.86-.12-.43-.14-.98-.32-1.68-.63-2.96-1.28-4.89-4.26-5.04-4.46-.15-.2-1.2-1.6-1.2-3.05 0-1.45.76-2.16 1.03-2.46.27-.3.59-.37.79-.37h.57c.18 0 .43-.07.67.51.25.6.85 2.07.92 2.22.07.15.12.33.02.53-.1.2-.15.32-.3.5-.15.18-.31.4-.44.54-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.02 1.12 1 2.06 1.31 2.36 1.46.3.15.48.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.73.82 2.03.97.3.15.5.22.57.35.08.13.08.75-.17 1.45z"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+const content = {
+  en: {
+    nav:{logoGlow:"Glow",logoOne:"One",promo:"Special Offer — 50% Off"},
+    hero:{audience:{founders:"Founders",creatives:"Creatives",entrepreneurs:"Entrepreneurs"},h1a:"Idea to real product.",h1b:"Built with speed and focus.",sub:"Egypt's first solo product studio. No account managers, no handoffs — a direct line to the person actually building it.",cta1:"Get a Demo"},
+    demo:{label:"Type your idea. Watch it become a plan.",placeholder:"A booking app for my detailing shop...",button:"Scope it",placeholder2:"Your scope will appear here — instantly."},
+    capabilities:{eyebrow:"What's Inside",h2:"The Full Loop",body:"From validating the idea, to building it, filming it, and growing it — one studio, every layer.",c1:{title:"Market Validation",desc:"We test demand before you spend a dollar building."},c2:{title:"AI Software & MVPs",desc:"Working products, not slide decks — shipped fast."},c3:{title:"AI Video & Creative",desc:"Reels and content that sell the product, not just show it."},c4:{title:"Growth Marketing",desc:"The channels that get your first real users, not vanity metrics."}},
+    pillars:{eyebrow:"Why GlowOne",p1:{title:"One operator",desc:"Not a freelancer. Not an agency. Full-stack, product-minded, single point of ownership."},p2:{title:"Focus & speed",desc:"Fixed price. No bloated discovery phases. No scope creep."},p3:{title:"AI-native creative",desc:"The product, and the content that sells it — from one source."},p4:{title:"Idea to real product",desc:"The whole journey — not just the development work."},p5:{title:"Direct line to the builder",desc:"No account managers. No tickets. Just you, and the person building it."}},
+    stories:{eyebrow:"Proof, not promises",h2:"Three points already surveyed",body:"Real builds, mapped to real problems.",flagship:"Flagship",s1:{tag:"Education",title:"Tutor Platform",arc:"An English tutor managed everything through Instagram DMs — no way to show her value beyond word of mouth. A branded platform now carries her teaching story, results, and booking in one place.",fromto:"FROM scattered DMs → TO a branded platform"},s2:{tag:"Fitness",title:"Trainer App",arc:"A personal trainer tracked every client's workouts from memory — no room to grow past a handful of people. An app now assigns routines and tracks progress on its own.",fromto:"FROM spreadsheets → TO a system that runs itself"},s3:{tag:"Personal AI",title:"Life OS",arc:"A system for anyone drowning in tasks and routines. An AI-powered tracker that manages your day and quietly surfaces what matters next.",fromto:"FROM mental overload → TO a system that thinks ahead"}},
+    process:{eyebrow:"How it works",h2:"Four steps. One person, start to finish.",st1:{title:"Demo call",desc:"You explain the problem. No forms, no briefs."},st2:{title:"Scope locked",desc:"Fixed price, fixed deliverable, in writing."},st3:{title:"Build",desc:"You get progress updates, not silence."},st4:{title:"Launch & handover",desc:"You own everything. No lock-in."}},
+    close:{h2:"Ready to see your idea scoped?",sub:"One conversation. No account manager in sight.",cta1:"Get a Demo"}
+  },
+  ar: {
+    nav:{logoGlow:"جلو",logoOne:"ون",promo:"عرض خاص — خصم 50%"},
+    hero:{audience:{founders:"أصحاب الأفكار",creatives:"المبدعين",entrepreneurs:"رواد الأعمال"},h1a:"من الفكرة إلى منتج حقيقي.",h1b:"بسرعة وتركيز.",sub:"أول استوديو منتجات فردي في مصر. بدون مدراء حسابات، بدون وسطاء — تواصل مباشر مع الشخص اللي بيبني منتجك فعليًا.",cta1:"احصل على ديمو"},
+    demo:{label:"اكتب فكرتك، وشوفها بتتحول لخطة.",placeholder:"تطبيق حجز لمحل تلميع سيارات...",button:"حدد النطاق",placeholder2:"خطتك هتظهر هنا — فورًا."},
+    capabilities:{eyebrow:"جوه الاستوديو",h2:"الحلقة الكاملة",body:"من التحقق من الفكرة، للبناء، للتصوير، للنمو — استوديو واحد، بكل طبقاته.",c1:{title:"التحقق من السوق",desc:"بنتأكد من الطلب قبل ما تصرف جنيه على البناء."},c2:{title:"برمجيات وMVPs بالذكاء الاصطناعي",desc:"منتجات شغالة، مش عروض تقديمية — بسرعة."},c3:{title:"فيديو وإبداع بالذكاء الاصطناعي",desc:"ريلز ومحتوى بيبيع المنتج، مش بس بيعرضه."},c4:{title:"تسويق للنمو",desc:"القنوات اللي بتجيبلك أول مستخدمين حقيقيين، مش أرقام فاضية."}},
+    pillars:{eyebrow:"ليه جلو ون",p1:{title:"شخص واحد",desc:"مش فريلانسر، ومش وكالة. بيبني كل حاجة بعقلية منتج، ومسؤولية واحدة."},p2:{title:"تركيز وسرعة",desc:"سعر ثابت. بدون جلسات اكتشاف مطوّلة. بدون تمدد في النطاق."},p3:{title:"إبداع بالذكاء الاصطناعي",desc:"المنتج، والمحتوى اللي بيبيعه — من مصدر واحد."},p4:{title:"من الفكرة لمنتج حقيقي",desc:"الرحلة كاملة، مش بس شغل البرمجة."},p5:{title:"تواصل مباشر مع البانى",desc:"بدون مدراء حسابات. بدون تذاكر دعم. إنت والشخص اللي بيبني، بس."}},
+    stories:{eyebrow:"إثبات، مش وعود",h2:"ثلاث نقاط اتعملها رصد بالفعل",body:"مشاريع حقيقية، لمشاكل حقيقية.",flagship:"المشروع الرئيسي",s1:{tag:"تعليم",title:"منصة لمدرّسة",arc:"مدرّسة لغة إنجليزية كانت بتدير كل حاجة من رسائل إنستغرام مبعثرة — مفيش طريقة توضح قيمتها غير الكلام. دلوقتي عندها منصة بهويتها الخاصة، بتعرض قصتها ونتايج طلابها وحجوزاتها في مكان واحد.",fromto:"من رسائل مبعثرة ← لمنصة متكاملة"},s2:{tag:"لياقة",title:"تطبيق مدرب",arc:"مدرب لياقة كان بيتابع كل عميل من دماغه — مفيش مجال يكبر أكتر من كام عميل. دلوقتي عنده تطبيق بيوزع البرامج ويتابع التقدم لوحده.",fromto:"من جداول يدوية ← لنظام بيدير نفسه"},s3:{tag:"ذكاء اصطناعي شخصي",title:"Life OS",arc:"نظام لأي حد غرقان في المهام والروتين. أداة بالذكاء الاصطناعي بتدير يومك وبتقولك إيه اللي مهم بعدين، من غير ما تسأل.",fromto:"من فوضى ذهنية ← لنظام بيفكر قبلك"}},
+    process:{eyebrow:"طريقة العمل",h2:"أربع خطوات، وشخص واحد من البداية للنهاية",st1:{title:"مكالمة الديمو",desc:"تشرح المشكلة. من غير استمارات ولا أوراق."},st2:{title:"تحديد النطاق",desc:"سعر ثابت، تسليم محدد، مكتوب."},st3:{title:"البناء",desc:"بتوصلك تحديثات باستمرار، مش صمت."},st4:{title:"الإطلاق والتسليم",desc:"كل حاجة ملكك. من غير أي قيود."}},
+    close:{h2:"جاهز تشوف فكرتك متحددة النطاق؟",sub:"مكالمة واحدة. من غير أي مدير حسابات في النص.",cta1:"احصل على ديمو"}
+  }
+};
+
+function setLang(lang){
+  document.documentElement.lang=lang;
+  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const path=el.getAttribute('data-i18n').split('.');
+    let val=content[lang];
+    path.forEach(p=>{val=val?val[p]:null;});
+    if(val)el.textContent=val;
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const path=el.getAttribute('data-i18n-placeholder').split('.');
+    let val=content[lang];
+    path.forEach(p=>{val=val?val[p]:null;});
+    if(val)el.setAttribute('placeholder',val);
+  });
+  document.getElementById('langToggle').textContent=lang==='ar'?'English':'العربية';
+  resetDemo();
+}
+
+let currentLang='en';
+document.getElementById('langToggle').addEventListener('click',()=>{
+  currentLang=currentLang==='en'?'ar':'en';
+  setLang(currentLang);
+});
+
+const scopeTemplates={
+  en:[
+    {tag:"core",label:"CORE",text:"One primary flow: booking, tracked automatically."},
+    {tag:"ai",label:"AI LAYER",text:"An assistant handles the repetitive questions for you."},
+    {tag:"pace",label:"PACE",text:"Fixed price. One focused build. No scope creep."}
+  ],
+  ar:[
+    {tag:"core",label:"الأساس",text:"مسار أساسي واحد: الحجز، بيتسجل أوتوماتيك."},
+    {tag:"ai",label:"طبقة الذكاء",text:"مساعد ذكي بيرد على الأسئلة المتكررة بدالك."},
+    {tag:"pace",label:"السرعة",text:"سعر ثابت. بناء مركّز واحد. من غير تمدد في النطاق."}
+  ]
+};
+
+function resetDemo(){
+  document.getElementById('demoOutput').innerHTML=`<div class="demo-placeholder">${content[currentLang].demo.placeholder2}</div>`;
+}
+
+document.getElementById('demoBtn').addEventListener('click',()=>{
+  const out=document.getElementById('demoOutput');
+  out.innerHTML='';
+  scopeTemplates[currentLang].forEach((line,i)=>{
+    const row=document.createElement('div');
+    row.className='plan-line';
+    row.style.animationDelay=(i*0.18)+'s';
+    row.innerHTML=`<span class="plan-tag ${line.tag}">${line.label}</span><span class="plan-text">${line.text}</span>`;
+    out.appendChild(row);
+  });
+});
+
+document.getElementById('ideaInput').addEventListener('keydown',(e)=>{
+  if(e.key==='Enter')document.getElementById('demoBtn').click();
+});
+</script>
+</body>
+</html>
