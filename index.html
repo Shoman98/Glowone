@@ -635,24 +635,47 @@ document.querySelectorAll('.js-whatsapp').forEach(el => {
   el.rel = 'noopener noreferrer';
 });
 
-document.getElementById('modalSubmit').addEventListener('click', function(){
+document.getElementById('modalSubmit').addEventListener('click', async function(){
   const lang = currentLang;
   const f = document.getElementById('modalForm');
-  const name = f.querySelector('[name=name]').value.trim();
-  const org  = f.querySelector('[name=org]').value.trim();
+  const name    = f.querySelector('[name=name]').value.trim();
+  const org     = f.querySelector('[name=org]').value.trim();
   const country = f.querySelector('[name=country]').value.trim();
-  const phone = f.querySelector('[name=phone]').value.trim();
-  const errEl = document.getElementById('modalError');
+  const phone   = f.querySelector('[name=phone]').value.trim();
+  const email   = f.querySelector('[name=email]').value.trim();
+  const errEl   = document.getElementById('modalError');
+  const btn     = document.getElementById('modalSubmit');
 
-  const required = lang==='ar'
-    ? 'يرجى ملء جميع الحقول المطلوبة'
-    : 'Please fill in all required fields';
+  const required = lang==='ar' ? 'يرجى ملء جميع الحقول المطلوبة' : 'Please fill in all required fields';
+  const errMsg   = lang==='ar' ? 'حدث خطأ، حاول مجدداً' : 'Something went wrong. Please try again.';
 
   if(!name || !org || !country || !phone){ errEl.textContent=required; return; }
   errEl.textContent='';
+  btn.disabled=true;
+  btn.textContent=lang==='ar'?'جاري الإرسال...':'Sending...';
 
-  document.getElementById('modalForm').style.display='none';
-  document.getElementById('modalSuccess').style.display='';
+  try {
+    const res = await fetch('https://api.web3forms.com/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        access_key:'00a70791-76c3-401f-aad5-3d80575bf4da',
+        subject:'New Demo Request — GlowOne',
+        name, email, phone,
+        organization:org,
+        country
+      })
+    });
+    const data = await res.json();
+    if(data.success){
+      document.getElementById('modalForm').style.display='none';
+      document.getElementById('modalSuccess').style.display='';
+    } else { throw new Error(); }
+  } catch(e){
+    errEl.textContent=errMsg;
+    btn.disabled=false;
+    btn.textContent=lang==='ar'?'إرسال':'Submit';
+  }
 });
 
 // ---- END DEMO MODAL ----
