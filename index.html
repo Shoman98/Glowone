@@ -305,7 +305,9 @@
 
 <section id="capabilities" class="capabilities">
   <div class="capabilities-media">
-    <video class="capabilities-video" autoplay muted loop playsinline></video>
+    <video class="capabilities-video" id="capVideo" loop playsinline preload="auto" style="pointer-events:none">
+      <source src="capabilities-bg.mp4" type="video/mp4">
+    </video>
     <div class="capabilities-overlay"></div>
   </div>
   <div class="blob blob-1"></div>
@@ -528,6 +530,27 @@ document.getElementById('demoBtn').addEventListener('click',()=>{
 document.getElementById('ideaInput').addEventListener('keydown',(e)=>{
   if(e.key==='Enter')document.getElementById('demoBtn').click();
 });
+
+// Capabilities background video — works on all browsers incl. iOS Safari
+(function(){
+  const vid = document.getElementById('capVideo');
+  if(!vid) return;
+  vid.muted = true;
+  vid.defaultMuted = true;
+  vid.setAttribute('muted','');
+  vid.setAttribute('autoplay','');
+  vid.setAttribute('playsinline','');
+  vid.setAttribute('webkit-playsinline','');
+
+  function tryPlay(){ vid.play().catch(function(){}); }
+
+  if(vid.readyState >= 2){ tryPlay(); }
+  else { vid.addEventListener('canplay', tryPlay, {once:true}); vid.load(); }
+
+  // iOS Safari: play on first user touch anywhere on the page
+  document.addEventListener('touchstart', function(){ tryPlay(); }, {once:true});
+  document.addEventListener('click', function(){ tryPlay(); }, {once:true});
+})();
 </script>
 </body>
 </html>
