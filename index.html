@@ -100,6 +100,7 @@
   html[dir="rtl"] .demo-panel{ text-align:right; box-shadow:-8px 8px 0 var(--blue); }
   .demo-label{ font-family:var(--font-body); font-size:0.88rem; font-weight:500; color:var(--text-on-gray); margin-bottom:14px; font-style:italic; }
   .demo-input-row{ display:flex; gap:10px; margin-bottom:20px; }
+  @media(max-width:560px){ .demo-panel{ padding:22px 18px; } .demo-input-row{ flex-direction:column; } .demo-btn{ padding:13px; border-radius:12px; width:100%; font-size:0.95rem; } }
   .demo-input{ flex:1; background:var(--white); border:1.5px solid var(--line-on-gray); color:var(--navy); font-family:var(--font-body); font-size:0.95rem; padding:13px 16px; border-radius:12px; }
   .demo-input:focus{ border-color:var(--blue); outline:none; }
   html[lang="ar"] .demo-input{ font-family:var(--font-ar); }
